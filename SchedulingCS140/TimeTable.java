@@ -108,11 +108,11 @@ public class TimeTable extends JFrame implements ActionListener {
 			for (int i = 1; i < courses.length(); i++)
 				System.out.println(i + "\t" + courses.slot(i) + "\t" + courses.status(i));
 			break;
-		case 4:
+		case 5:
 			courses.iterate(Integer.parseInt(field[4].getText()));
 			draw();
 			break;
-		case 5:
+		case 4:
 			System.exit(0);
 			break;
 		}
