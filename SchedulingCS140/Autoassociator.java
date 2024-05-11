@@ -4,6 +4,10 @@ public class Autoassociator {
     private int[][] weights;
     private int numNeurons;
     private Random random;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 86d9ac9a349767fa8a5e484709ccea8dd391503c
     public Autoassociator(CourseArray courses) {
         this.numNeurons = courses.length();
         this.weights = new int[numNeurons][numNeurons];
