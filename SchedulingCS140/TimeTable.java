@@ -1,6 +1,10 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.*;
 
 public class TimeTable extends JFrame implements ActionListener {
 
@@ -9,7 +13,8 @@ public class TimeTable extends JFrame implements ActionListener {
 	private JTextField field[];
 	private CourseArray courses;
 	private Color CRScolor[] = {Color.RED, Color.GREEN, Color.BLACK};
-	
+	private Autoassociator autoassociator;
+		
 	public TimeTable() {
 		super("Dynamic Time Table");
 		setSize(500, 800);
@@ -23,6 +28,21 @@ public class TimeTable extends JFrame implements ActionListener {
 		
 		setVisible(true);
 	}
+
+public void loadCourses() {
+        int slots = Integer.parseInt(field[0].getText());
+        int numCourses = Integer.parseInt(field[1].getText()) + 1;
+        String clashFile = field[2].getText();
+
+        // Create CourseArray and read clashes from the specified file
+        courses = new CourseArray(numCourses, slots);
+        courses.readClashes(clashFile);
+
+        // Initialize the Autoassociator
+        autoassociator = new Autoassociator(courses);
+        
+        draw(); // Redraw the GUI
+    }
 	
 	public void setTools() {
 		String capField[] = {"Slots:", "Courses:", "Clash File:", "Iters:", "Shift:"};
@@ -118,6 +138,47 @@ public class TimeTable extends JFrame implements ActionListener {
 		}
 	}
 
+public void trainAutoassociator() {
+ try {
+            File logFile = new File("/Users/lanatadevosyan/Desktop/mechanics-a/SchedulingCS140"); // File containing timeslot data
+            Scanner scanner = new Scanner(logFile); // Scanner to read the file
+
+            boolean inTimeslotsSection = false;
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+
+                if (line.startsWith("Shift")) {
+                    inTimeslotsSection = false; // Marks the end of timeslot data section
+                }
+
+                if (inTimeslotsSection && line.matches("\\d+\\s+\\d+\\s+\\d+")) {
+                    // Extract timeslot data
+                    String[] parts = line.split("\\s+");
+                    int exam = Integer.parseInt(parts[0]);
+                    int slot = Integer.parseInt(parts[1]);
+
+                    // Assuming clashes are not used for training
+                    if (Integer.parseInt(parts[2]) == 0) {
+                        // Train the Autoassociator with the clash-free timeslot
+                        int[] timeslotArray = new int[courses.length()];
+                        timeslotArray[exam - 1] = slot; // Adjust index
+                        autoassociator.training(timeslotArray);
+                    }
+                }
+
+                if (line.startsWith("Exam\tSlot\tClashes")) {
+                    inTimeslotsSection = true; // Marks the start of timeslot data section
+                }
+            }
+
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: File not found");
+            e.printStackTrace();
+        }
+   } 
+    
 	public static void main(String[] args) {
 		new TimeTable();
 	}

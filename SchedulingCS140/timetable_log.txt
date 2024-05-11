@@ -216,3 +216,48 @@ Exam	Slot	Clashes
 
 Some observations that I've made, is that  allowing more shifts helps resolve clashes by giving exams more flexibility to move to different timeslots, just gotta work on it more
 
+After adding an autoassociator, and training
+
+
+in .crs file 
+there are course codes, and the last code is the number of courses we have
+
+in .stu file
+one line is one student and shows what courses has the students taken, for example, 
+0001 0002
+means the first student took 1st and 2nd courses
+
+course array has n + 1 elements where the first element is not a course its a dummy course and we start index from 1 until n 
+
+mySlot (slot index) = slot % 17 (modula, taking remainder)
+force = num of courses it clashes with
+continue is for when you do 10 iters but you wanna continue doing 100 more iters then you continue instead of starting all over again
+Autoasasociator is the hopefield network
+	fix continue button
+2.2 gettimeSlot
+int pattern[] = new int[n + 1] //n is length of course, 190
+for(int i = 1; i <pattern.length(); i++)
+	pattern[i] = courses.slot(i) == 1 ? 1 : -1;
+CALculate average shit 381/17 ~ 22 and then x 0.5 = 11
+the training data in total has to be 0.139 * 190 change shifts
+
+the neural network 
+diagonals are all 0
+adjacency matrix in autoassociator is symmetric
+weight(i,j) = pattern[i] * pattern [j] + weight(i,j);
+dp this until 52 times ##this is the training method`
+update()
+1 cell update
+timeslot -? pattern
+update(neurons){
+k=random(382)
+dheck if the neuon value needsto be updated or no 
+which means if 1 becomes -1 if -1 becomes 1 
+how to decide? 
+xk  = signium function (sum of weights * x until 381)
+if (xk < 0) takes -1
+else takes 1
+full update not needed
+
+
+WILL ADD UPDATES LATER
