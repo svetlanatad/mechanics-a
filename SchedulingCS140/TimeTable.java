@@ -33,22 +33,43 @@ public class TimeTable extends JFrame implements ActionListener {
         int slots = Integer.parseInt(field[0].getText());
         int numCourses = Integer.parseInt(field[1].getText()) + 1;
         String clashFile = field[2].getText();
-
-        // Create CourseArray and read clashes from the specified file
         courses = new CourseArray(numCourses, slots);
         courses.readClashes(clashFile);
-
-        // Initialize the Autoassociator
         autoassociator = new Autoassociator(courses);
-
-        draw(); // Redraw the GUI
+        draw();
     }
+
+public void trainAndLog(int[] pattern, int iterations) {
+    Autoassociator autoassociator = new Autoassociator(courses);
+
+    for (int iteration = 1; iteration <= iterations; iteration++) {
+        autoassociator.chainUpdate(pattern, 1);
+
+        System.out.println("Iteration: " + iteration);
+        System.out.print("Timeslots: ");
+        for (int i = 0; i < pattern.length; i++) {
+            System.out.print(pattern[i] + " ");
+        }
+        System.out.println();
+
+        int clashes = courses.clashesLeft();
+        System.out.println("Clashes: " + clashes);
+
+        System.out.println("Timeslot Assignments:");
+        for (int i = 1; i < courses.length(); i++) {
+            System.out.println("Course " + i + ": Slot " + courses.slot(i));
+        }
+
+        System.out.println("----------------------------------------");
+    }
+}
+
 
     public void setTools() {
         String capField[] = {"Slots:", "Courses:", "Clash File:", "Iters:", "Shift:"};
         field = new JTextField[capField.length];
 
-        String capButton[] = {"Load", "Start", "Step", "Print", "Exit", "Continue"};
+        String capButton[] = {"Load", "Start", "Step", "Print", "Exit", "Continue", "Train"};
         tool = new JButton[capButton.length];
 
         tools.setLayout(new GridLayout(capField.length + capButton.length, 1));
@@ -66,7 +87,7 @@ public class TimeTable extends JFrame implements ActionListener {
         }
 
         field[0].setText("17");
-        field[1].setText("381");
+        field[1].setText("190");
         field[2].setText("ear-f-83.stu");
         field[3].setText("1");
     }
@@ -149,6 +170,19 @@ public class TimeTable extends JFrame implements ActionListener {
                 System.out.println("Shift = " + field[4].getText() + "\tMin clashes = " + min + "\tat step " + step);
                 setVisible(true);
                 break;
+
+		case 6:
+    			int slots = Integer.parseInt(field[0].getText());
+    			courses = new CourseArray(Integer.parseInt(field[1].getText()) + 1, slots);
+    			courses.readClashes(field[2].getText());
+    			draw();
+    			int[] pattern = new int[courses.length()];
+   		 	for (int i = 1; i < courses.length(); i++) {
+       			 	pattern[i - 1] = courses.slot(i);
+   								 }
+    			trainAndLog(pattern, Integer.parseInt(field[3].getText()));
+   		 break;
+
         }
     }
 
