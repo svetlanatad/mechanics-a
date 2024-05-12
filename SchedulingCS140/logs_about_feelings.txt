@@ -1,0 +1,7 @@
+Here I would like to share my thoughts and problems I encountered with during implementation of the project so far, now I am at task 4, which means I am yet to train the model and share the results. 
+
+So far, it's been quite fun understanding what the project is about, and I understood a lot of implementation details during the PSS session yesterday, although today I was having trouble understanding where should I be starting the index of the continue method, as the field from which it parses the index (which is iters) is the same, supposedly, I was debugging it for straight 59 mins, until I figured, it should start from whatever step iteration it was on, so, just decrement the index by one, copy paste the same code from start, and it should work, and it did, or maybe I understood it wrong, please correct me if I am wrong. 
+
+This might not be too relevant, but I was having problems understanding teh layout so I had to read the documentation of GUI, and align it in a way I think looks good, but it eventually ended up looking how I'd like it to look like
+
+Now for the training part, I am mostly confused how to actually train it with an instance of Autoassociator in TimeTable, but, I think, if I add another method in TImetable, that just uses autoassociator's training method, and then does chainUpdates, then it should work, I will try and keep updating 
