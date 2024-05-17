@@ -43,17 +43,29 @@ public void trainAndLog(int[] pattern, int iterations) {
     Autoassociator autoassociator = new Autoassociator(courses);
 
     for (int iteration = 1; iteration <= iterations; iteration++) {
+	autoassociator.training(pattern);
         autoassociator.chainUpdate(pattern, 1);
 
-        System.out.println("Iteration: " + iteration);
-        System.out.print("Timeslots: ");
-        for (int i = 0; i < pattern.length; i++) {
-            System.out.print(pattern[i] + " ");
-        }
-        System.out.println();
+       // System.out.println("Iteration: " + iteration);
+       // System.out.print("Timeslots: ");
+      for (int i = 1; i < courses.length(); i++) {
+                courses.setSlot(i, pattern[i - 1]);
+            }
+
 
         int clashes = courses.clashesLeft();
-        System.out.println("Clashes: " + clashes);
+	//  for (int i = 1; i < pattern.length; i++) {
+         //   System.out.print(pattern[i] + " ");
+       // }
+        //System.out.println();
+	
+       // System.out.println("Clashes: " + clashes);
+	 System.out.println("Iteration: " + iteration);
+            System.out.println("Clashes: " + clashes);
+            if (clashes == 0) {
+                System.out.println("No clashes found.");
+                return;
+            }
 
         System.out.println("Timeslot Assignments:");
         for (int i = 1; i < courses.length(); i++) {
